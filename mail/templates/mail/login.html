@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>WebMail</title>
+
+        <style type="text/css">
+
+
+
+        </style>
+
+        <script type="text/javascript">
+
+            function onloadOverride() {
+
+            }
+
+        </script>
+
+    </head>
+    <body onload="onloadOverride()">
+
+        <div align="center">
+
+            <form action="{% url 'mail:check_login' %}" method="POST">
+                {% csrf_token %}
+                <div margin="auto">
+                    <h1 style="text-align: center;">Login Web Mail</h1>
+                    EMAIL: <input type="text" name="email"><br>
+                    PASSWORD: <input type="password" name="password">
+                </div><br>
+                <div margin="auto">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+
+        </div>
+
+    </body>
+</html>

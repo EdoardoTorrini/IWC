@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+    </head>
+    <body>
+
+    {% for element in mail %}
+        <form action="{% url 'mail:inspect_mail' %}" method="GET">
+            {% csrf_token %}
+
+            <input type="hidden" value="{{ element.messid }}" name="messid">
+            <input type="hidden" value="{{ token }}" name="token">
+
+            {{ element.from }} {{ element.subject }} {{ element.date }}
+
+            <input type="submit" value="select">
+        </form>
+    {% endfor %}
+
+    {% for box in boxes %}
+        <p>{{ box }}</p>
+    {% endfor %}
+
+    </body>
+</html>
