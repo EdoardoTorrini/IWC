@@ -2,40 +2,30 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>WebMail</title>
-
-        <style type="text/css">
-
-
-
-        </style>
-
-        <script type="text/javascript">
-
-            function onloadOverride() {
-
-            }
-
-        </script>
-
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mail login</title>
+        
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'mail/styles/login.css' %}">
     </head>
-    <body onload="onloadOverride()">
+    <body>
+        <div>
+            <h1>LOGIN</h1>
 
-        <div align="center">
-
-            <form action="{% url 'mail:check_login' %}" method="POST">
+            <form  action="{% url 'mail:check_login' %}" method="POST">
                 {% csrf_token %}
-                <div margin="auto">
-                    <h1 style="text-align: center;">Login Web Mail</h1>
-                    EMAIL: <input type="text" name="email"><br>
-                    PASSWORD: <input type="password" name="password">
-                </div><br>
-                <div margin="auto">
-                    <input type="submit" value="Login">
-                </div>
+
+                <label for="mail">Mail</label><br>
+                <input type="email" name="email" id="mail" required>
+                <br><br>
+
+                <label for="pwd">Password</label><br>
+                <input type="password" name="password" id="pwd" required>
+                <br><br>
+                
+                <input type="submit" value="Login">
             </form>
-
         </div>
-
     </body>
 </html>

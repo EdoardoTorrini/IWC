@@ -8,8 +8,9 @@ from django.conf import settings
 # Create your views here.
 
 from mail.models import *
+from datetime import datetime
 import hashlib
-from IWC.my_lib import StringElaborator
+from IWC.my_lib import StringElaborator, DateTimeConverter
 
 
 class LoginMailView(View):
@@ -106,13 +107,13 @@ class HomeMailView(View):
             context["mail"].append(
                 {
                     "messid": sMailId,
-                    "date": oMail["Date"],
+                    "date": DateTimeConverter(oMail["Date"], bEmail=True).getDateFormatted("%m/%d/%Y, %H:%M:%S"),
                     "subject": oMail["Subject"],
-                    "from": oMail["From"]
+                    "from": str( oMail["From"])[:oMail["From"].find(" <") ]
                 }
             )
 
-        return render(request, "mail/home.html", context)
+        return render(request, "mail/index.html", context)
 
 
 class MailInspector(View):
@@ -122,12 +123,22 @@ class MailInspector(View):
         sToken = str( request.GET.get("token") )
         sMailId = str( request.GET.get("messid") )
 
+        objIMAP = settings.IMAP_MANAGER.get(sToken)
+        oMail = objIMAP.getMailDict().get(sMailId)
+
         context = {
             "token": sToken,
-            "body": None
+            "body": StringElaborator(str( objIMAP.readMessageFromId(sMailId) )).getPlainText(),
+            "date": oMail["Date"],
+            "subject": oMail["Subject"],
+            "from": oMail["From"]
         }
 
-        objIMAP = settings.IMAP_MANAGER.get(sToken)
-        sBody = StringElaborator(str( objIMAP.readMessageFromId(sMailId) )).getPlainText()
+        return HttpResponse(context["body"])
 
-        return HttpResponse(sBody)
+
+class MailSender(View):
+
+    def post(self, request):
+
+        sToken = str( request.POST.get("token") )

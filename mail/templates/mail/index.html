@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mail Client</title>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'mail/styles/style.css' %}">
+        <script src="{% static 'mail/scripts/script.js' %}"></script>
+    </head>
+    <body class="preload">
+
+        <header>
+            <h1>
+                MAIL CLIENT
+            </h1>
+            <div class="aside_alt" onclick="showPhoneMenu()">
+                MENU
+            </div>
+        </header>
+
+        <div id="phoneMenu">
+            <nav>
+                {% for box in boxes %}
+                <button class="sidebar_button">
+                    {{ box }}
+                </button> <br>
+                {% endfor %}
+            </nav>
+        </div>
+        <button class="sendBtn sendBtn_phone">
+            Write mail
+        </button>
+
+        <aside>
+            <div class="side_container">
+                <button class="sendBtn">
+                    Write mail
+                </button>
+
+                <nav>
+                    {% for box in boxes %}
+                        <button class="sidebar_button">
+                            {{ box }}
+                        </button> <br>
+                    {% endfor %}
+                </nav>
+            </div>
+        </aside>
+
+        <div class="content">
+            <div id="pageContent">
+                {% for element in mail %}
+                    <form id="{{ element.messid }}" action="{% url 'mail:inspect_mail' %}" method="GET">
+                        {% csrf_token %}
+
+                        <div class="mail" onClick="document.forms['{{ element.messid }}'].submit()">
+
+                            <input type="hidden" value="{{ element.messid }}" name="messid">
+                            <input type="hidden" value="{{ token }}" name="token">
+
+                            {{ element.from }} {{ element.subject }} {{ element.date }}
+                        </div>
+                    </form>
+                {% endfor %}                
+            </div>
+        </div>
+        
+    </body>
+</html>
