@@ -1,0 +1,48 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'mail/styles/style.css' %}">
+<script src="{% static 'mail/scripts/script.js' %}"></script>
+
+<form enctype="multipart/form-data" method="POST" action="{% url 'mail:send_email' %}">
+    {% csrf_token %}
+
+    <input type="hidden" value="{{ token }}" name="token">
+
+    <div id="wroteEmailDivTitle">
+        <label style="font-weight: bold;">Nuovo Messaggio</label>
+        <input type="button" value="X" id="btnCloseWrtEmail" onclick="closePopWrtEmail()">
+    </div>
+    
+    <div class="setEmailWrt">
+        <label style="width: 15%;">Destinatari: </label>
+        <input type="email" name="emailListDest" class="txtEmailSetWtr" required>
+    </div>
+    
+    <div class="setEmailWrt">
+        <label style="width: 15%;">Cc: </label>
+        <input type="email" name="emailListCc" class="txtEmailSetWtr">
+    </div>
+    
+    <div class="setEmailWrt">
+        <label style="width: 15%;">Ccn: </label>
+        <input type="email" name="emailListCcn" class="txtEmailSetWtr">
+    </div>
+    
+    <div class="setEmailWrt">
+        <label style="width: 15%;">Oggetto: </label>
+        <input type="text" name="emailObj" class="txtEmailSetWtr" required>
+    </div>
+    
+    <div id="emailBodyInput" style="height: 200px;">
+        <textarea type="text" name="body" id="txtBodyInput" style="height: 170px;"></textarea>
+    </div>
+    
+    <div id="wroteEmailDivTitle" style="position: fixed; right: 5px; bottom: 5px; width: 790px;">
+        <div style="float: right; margin-right: 5px;">
+            
+            <input type="file" id="fileChooser" name="document" hidden multiple>
+            <img src="{% static 'mail/img/allegare.png' %}" onclick="selFileFromSystem()" class="pointer">
+            <input src="{% static 'mail/img/invia.png' %}" type="image">
+        </div>
+    </div>
+
+</form>

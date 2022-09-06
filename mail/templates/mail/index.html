@@ -10,7 +10,9 @@
         <link rel="stylesheet" href="{% static 'mail/styles/style.css' %}">
         <script src="{% static 'mail/scripts/script.js' %}"></script>
     </head>
-    <body class="preload">
+    <body class="preload" onload="timerReloadEmail()">
+
+    <label hidden id="mail_list">{{ mail }}</label>
 
         <header>
             <h1>
@@ -36,36 +38,61 @@
 
         <aside>
             <div class="side_container">
-                <button class="sendBtn">
+                <button class="sendBtn" onclick="btnWriteClicked()">
                     Write mail
                 </button>
 
                 <nav>
-                    {% for box in boxes %}
-                        <button class="sidebar_button">
-                            {{ box }}
-                        </button> <br>
+                    {% for box_dict in boxes %}
+                        {% for id, box in box_dict.items %}
+                            <form id="{{ id }}" action="{% url 'mail:home' %}" method="POST">
+                                {% csrf_token %}
+                                
+                                <input type="hidden" value="{{ id }}" name="box">
+                                <input type="hidden" value="{{ token }}" name="token">
+
+                                <button class="sidebar_button" onclick="selBox('{{ id }}', '{{ token }}')">
+                                    {{ box }}
+                                </button> <br>
+
+                            </form>
+                        {% endfor %}
                     {% endfor %}
                 </nav>
             </div>
         </aside>
-
+        
         <div class="content">
             <div id="pageContent">
+                
+                {% block PageContent %}
                 {% for element in mail %}
-                    <form id="{{ element.messid }}" action="{% url 'mail:inspect_mail' %}" method="GET">
-                        {% csrf_token %}
-
-                        <div class="mail" onClick="document.forms['{{ element.messid }}'].submit()">
-
-                            <input type="hidden" value="{{ element.messid }}" name="messid">
-                            <input type="hidden" value="{{ token }}" name="token">
-
-                            {{ element.from }} {{ element.subject }} {{ element.date }}
-                        </div>
-                    </form>
-                {% endfor %}                
+                <form id="{{ element.messid }}" action="{% url 'mail:inspect_mail' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="mail" onClick="document.forms['{{ element.messid }}'].submit()">
+                        <input type="hidden" value="{{ element.messid }}" name="messid">
+                        <input type="hidden" value="{{ token }}" name="token">
+                        
+                        <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.from }}</div>
+                        <div style="float: left; width: 50%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.subject }}</div>
+                        <div style="float: left; width: 25%; text-align: right;">{{ element.date }}&emsp;</div>
+                        
+                        <!--
+                        <label>{{ element.from }}</label>
+                        <label style="overflow: hidden; text-overflow: clip;">{{ element.subject }}</label>
+                        <label>{{ element.date }}</label>
+                        -->
+                    </div>
+                </form>
+                {% endfor %} 
+                {% endblock %}         
             </div>
+        </div>
+
+        <div id="wroteEmailDiv">
+
+            {% include "mail/write_mail.html" %}
+
         </div>
         
     </body>

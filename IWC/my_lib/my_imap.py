@@ -17,6 +17,7 @@ class MyIMAP(Thread):
         self.dMailDict = {}
 
         self.recv = None
+        self.sSelBoxMail = "INBOX"
 
         # TODO: se non è connesso a internet va in errore
         self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
@@ -40,7 +41,7 @@ class MyIMAP(Thread):
             while 1:
 
                 # bisogna poter cambiare cartella
-                status, messages = self.oImap.select("INBOX")
+                status, messages = self.oImap.select(self.sSelBoxMail)
                 nMess = int(messages[0].decode("utf-8"))
 
                 for i in range(1, nMess + 1):
@@ -57,11 +58,21 @@ class MyIMAP(Thread):
         except Exception as sErr:
             print(self.email, "-", sErr)
 
+    def setReadBox(self, sBox):
+        if sBox in self.getMailBoxes().keys():
+            self.sSelBoxMail = sBox
+
     def getMailDict(self):
         return self.dMailDict
 
     def getMailBoxes(self):
-        return self.aBoxList
+        dBoxes = {}
+        for elem in self.aBoxList:
+            for split in elem.split(" "):
+                if split.find("INBOX") > -1 or split.find("[Gmail]/") > -1:
+                    sTmp = split.replace("[Gmail]/", "")
+                    dBoxes[split[1:-1]] = sTmp[1:-1]
+        return dBoxes
 
     def getElementFromIdMess(self, sReqIdMess):
 
