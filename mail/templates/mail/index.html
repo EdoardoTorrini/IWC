@@ -8,6 +8,7 @@
 
         {% load static %}
         <link rel="stylesheet" href="{% static 'mail/styles/style.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="{% static 'mail/scripts/script.js' %}"></script>
     </head>
     <body class="preload" onload="timerReloadEmail()">
@@ -73,15 +74,13 @@
                         <input type="hidden" value="{{ element.messid }}" name="messid">
                         <input type="hidden" value="{{ token }}" name="token">
                         
-                        <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.from }}</div>
+                        {% if mail_sent is False %}
+                            <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.from }}</div>
+                        {% else %}
+                            <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.to }}</div>
+                        {% endif %}
                         <div style="float: left; width: 50%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.subject }}</div>
                         <div style="float: left; width: 25%; text-align: right;">{{ element.date }}&emsp;</div>
-                        
-                        <!--
-                        <label>{{ element.from }}</label>
-                        <label style="overflow: hidden; text-overflow: clip;">{{ element.subject }}</label>
-                        <label>{{ element.date }}</label>
-                        -->
                     </div>
                 </form>
                 {% endfor %} 

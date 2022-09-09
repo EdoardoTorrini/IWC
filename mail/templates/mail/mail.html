@@ -2,31 +2,48 @@
 
 {% block PageContent %}
 
-<div>
-    From: {{ from }}<br>
-    Date: {{ date }}<br>
-    Subject: {{ subject }}<br><br>
+<div id="divInsMail">
+
+    <div id="divObjMail">
+        {{ subject }}<br><br>
+    </div>
+
+    <div id="divTableMail">
+        <table>
+            <tr>
+                <td id="divFromMail">
+                    {{ from }} <button id="btnOpenDetails" onclick="btnViewMailDetails()"><i class="fa fa-caret-down"></i></button>
+                </td>
+                <td id="divDateMail">{{ date }}</td>
+            </tr>
+        </table>
+        <div id="myDropdown" class="dropdown-content">
+            <label>from: {{ from }}</label><br>
+            to:
+            {% for email in mailTo %}
+                {% if email is not None %}
+                    <label>{{ email }}</label><br>
+                {% endif %}
+            {% endfor %}
+            <label>date: {{ date }}</label><br>
+            <label>subject: {{ subject }}</label>
+        </div>
+    </div>
+
+    <div>
+        {{ body }}
+    </div>
+
+    <div>
+        {% if file is not None %}
+
+            {% for doc in file %}
+                <label>{{ doc }}</label>
+            {% endfor %}
+
+        {% endif %}
+    </div>
     
-    {{ body }}
 </div>
 
 {% endblock %}
-
-<!--
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ subject }}</title>
-    </head>
-    <body>
-        From: {{ from }}<br>
-        Date: {{ date }}<br>
-        Subject: {{ subject }}<br><br>
-
-        {{ body }}
-    </body>
-</html>
-
--->

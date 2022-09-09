@@ -1,5 +1,7 @@
 from threading import Thread
 import smtplib
+import os
+from django.conf import settings
 
 from email.message import EmailMessage
 from email.mime.multipart import MIMEMultipart
@@ -28,6 +30,8 @@ class MySMTP(Thread):
         self.oServer.ehlo()
         self.oServer.starttls()
 
+        self.mToSend = []
+
     def run(self):
 
         try:
@@ -35,21 +39,22 @@ class MySMTP(Thread):
             msgEmail = self.createEmail()
             self.oServer.sendmail(
                 self.sEmailFrom,
-                ", ".join(self.aEmailDest),
+                self.mToSend,
                 msgEmail.as_string()
             )
+
+            print("invio mail effettuato")
 
         except NameError:
             # TODO: aggiungi gestione errore
             pass
         except Exception as sErr:
             # TODO: aggiungi gestione errore
-            pass
+            print(sErr)
 
     def createEmail(self):
 
         msgEmail = MIMEMultipart()
-
         try:
             if self.sEmailFrom is not None and self.sEmailFrom != "":
                 msgEmail["From"] = self.sEmailFrom
@@ -57,14 +62,17 @@ class MySMTP(Thread):
             ''' attach the list of the recivers email address '''
             if len( self.aEmailDest ) > 0:
                 msgEmail["To"] = ", ".join(self.aEmailDest)
+                self.mToSend += self.aEmailDest
 
             ''' attach the list of the recivers email address put in the CC '''
             if len( self.aEmailCC ) > 0:
                 msgEmail["CC"] = ", ".join(self.aEmailCC)
+                self.mToSend += self.aEmailCC
 
             ''' attach the list of the recivers email address put in the CCn '''
             if len( self.aEmailCCn ) > 0:
                 msgEmail["CCn"] = ", ".join(self.aEmailCCn)
+                self.mToSend += self.aEmailCCn
 
             ''' attach the Object of the mail '''
             if self.sObj is not None and self.sObj != "":
@@ -73,26 +81,31 @@ class MySMTP(Thread):
             ''' attach the Body of the mail '''
             if self.sBody is not None and self.sBody != "":
                 msgEmail.attach(
-                    MIMEText("<b>Vediamo se funziona con due mail</b>", "html")
+                    MIMEText(self.sBody, "html")
                 )
 
             if len( self.aFile ) > 0:
                 for file in self.aFile:
-                    est = file
+                    est = file.split(".")[1]
+                    path = settings.MEDIA_ROOT + "\\" + file
 
                     if est in ["png", "jpg", "jpeg"]:
-                        with open(file, "rb") as fImg:
-                            img = MIMEImage(fImg.read())
-                            img.add_header('Content-Disposition', 'attachment', filename=file)
-                            msgEmail.attach(img)
+                        if os.path.exists(path):
+                            with open(path, "rb") as fImg:
+                                img = MIMEImage(fImg.read())
+                                img.add_header('Content-Disposition', 'attachment', filename=file)
+                                msgEmail.attach(img)
 
-                    if est == "pdf":
-                        pdf = MIMEApplication(open(file, "rb").read())
-                        pdf.add_header('Content-Disposition', 'attachment', filename=pdf)
-                        msgEmail.attach(pdf)
+                    else:
+                        if os.path.exists(path):
+                            fSend = MIMEApplication(open(path, "rb").read())
+                            fSend.add_header('Content-Disposition', 'attachment', filename=file)
+                            msgEmail.attach(fSend)
 
         except NameError:
             # TODO: gestione errore
             pass
+        except Exception as sErr:
+            print(sErr)
 
         return msgEmail

@@ -1,3 +1,7 @@
+* {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -56,7 +60,6 @@ header h1 {
 
 	float: right;
 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-size: 15px;
 	font-weight: bold;
 }
@@ -370,7 +373,6 @@ nav button:hover {
 	margin: auto;
 
 	background-color: #f7dc0a;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 	border-radius:5px;
 	padding:5px;
@@ -384,7 +386,6 @@ nav button:hover {
 	border-width: 0;
 	box-shadow: none;
 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-weight: bold;
 	color: #303030;
 
@@ -402,7 +403,6 @@ nav button:hover {
 
 	background-color: #101010;
 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	color: #ffffff;
 
 	border-radius:5px;
@@ -418,7 +418,6 @@ nav button:hover {
 
 	background-color: #101010;
 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	color: #ffffff;
 
 	border-radius:5px;
@@ -461,7 +460,6 @@ textarea {
 .btnSendEmail {
 	float: right;
 
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	color: #f7dc0a;
 
 	border-radius: 5px;
@@ -471,3 +469,57 @@ textarea {
 .pointer:hover {
 	cursor: pointer;
 }
+
+/* PARTE DELLA LETTURA DELLE MAIL */
+
+#divInsMail {
+
+	background-color: #f7dc0a;
+
+	position: fixed;
+	top: 70px;
+	left: calc(var(--sidebar_size) + 10px);
+	right: 10px;
+	bottom: 10px;
+
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#divObjMail {
+
+}
+
+#divFromMail {
+	width: 100vw;
+}
+
+#divDateMail {
+	width: 320px;
+}
+
+#divTableMail {
+}
+
+#btnOpenDetails  {
+	border-radius: 15px;
+	border-color: #af9b02;
+
+	background-color: #f7dc0a;
+}
+
+.dropdown-content {
+	display: none;
+
+	background-color: #f1f1f1;
+	min-width: 160px;
+	overflow: auto;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	right: 0;
+	z-index: 1;
+
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.show {display: block;}

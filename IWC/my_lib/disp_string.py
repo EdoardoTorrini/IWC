@@ -19,7 +19,7 @@ class StringElaborator:
                 case "base64":
                     import base64
                     sRet = codecs.decode(base64.b64decode(codecs.encode(aTmp[1])))
-                case "quoted-printable":
+                case "quoted-printable" | "7bit":
                     import quopri
                     sRet = quopri.decodestring(aTmp[1])
                 case _:

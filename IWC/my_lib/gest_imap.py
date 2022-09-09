@@ -1,4 +1,4 @@
-from .my_imap import MyIMAP
+from .IMAP import MyIMAP
 
 
 class ImapStack:
