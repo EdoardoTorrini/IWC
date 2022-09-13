@@ -1,6 +1,8 @@
 from threading import Thread
 import imaplib
-import email
+
+from . import ImapMail
+from . import APIMail
 
 
 class MyIMAP(Thread):
@@ -18,6 +20,7 @@ class MyIMAP(Thread):
 
         self.recv = None
         self.sSelBoxMail = '"INBOX"'
+        self.tIMAP_USER = APIMail(self.id)
 
         # TODO: se non è connesso a internet va in errore
         self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
@@ -52,26 +55,16 @@ class MyIMAP(Thread):
                     for i in range(1, nMess + 1):
                         res, msg = self.oImap.fetch(str(i), "(RFC822)")
 
-                        for response in msg:
-                            if isinstance(response, tuple):
-                                msg = email.message_from_bytes(response[1])
-                                aFile = []
-
-                                sIdMess = msg["Message-ID"]
-                                if sIdMess not in self.dMailDict[box].keys():
-                                    self.dMailDict[box][sIdMess] = msg
-                                    for part in msg.walk():
-                                        if part.get_filename() is not None:
-                                            aFile.append(part.get_filename())
-                                        self.dMailDict[box][sIdMess]["File"] = aFile
+                        ImapMail(msg, self.id, box).start()
 
         except Exception as sErr:
             print(self.email, "-", sErr)
 
-    def getMailDict(self):
-        if self.sSelBoxMail in self.dMailDict.keys():
-            return self.dMailDict[self.sSelBoxMail]
-        return {}
+    ''' metodi per il funzionamento della libreria '''
+
+    def setBoxMail(self, sIdBox):
+        if sIdBox in self.getMailBoxes().keys():
+            setattr(self, "sSelBoxMail", sIdBox)
 
     def getMailBoxes(self):
         dBoxes = {}
@@ -85,24 +78,16 @@ class MyIMAP(Thread):
                 dBoxes[sKey] = sKey[1:-1]
         return dBoxes
 
-    def setBoxMail(self, sIdBox):
-        if sIdBox in self.getMailBoxes().keys():
-            setattr(self, "sSelBoxMail", sIdBox)
-
-    def getElementFromIdMess(self, sReqIdMess):
-
-        for mail in self.dMailDict[self.sSelBoxMail].keys():
-            if mail == sReqIdMess:
-                return self.dMailDict[self.sSelBoxMail][mail]
-
-    def readMessageFromId(self, sReqIdMess):
-
-        oMsg = self.dMailDict[self.sSelBoxMail].get(sReqIdMess)
-        if oMsg is not None:
-            if oMsg.is_multipart():
-                return oMsg.get_payload(0)
-            else:
-                return oMsg.get_payload(None, True)
-
     def getCurrentBoxMail(self):
         return self.sSelBoxMail
+
+    ''' metodi per recuperare elementi delle mail '''
+
+    def getMailList(self):
+        return self.tIMAP_USER.getMailList(self.sSelBoxMail)
+
+    def getMailFromId(self, sId):
+        return self.tIMAP_USER.getMailFromId(sId)
+
+    def getUrlFromEmail(self, sId):
+        return self.tIMAP_USER.getUrlFromEmail(sId)

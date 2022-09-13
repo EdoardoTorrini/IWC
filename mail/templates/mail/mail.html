@@ -38,7 +38,7 @@
         {% if file is not None %}
 
             {% for doc in file %}
-                <label>{{ doc }}</label>
+                <a href="/mail/{{ doc.url }}">{{ doc.name }}</a>
             {% endfor %}
 
         {% endif %}

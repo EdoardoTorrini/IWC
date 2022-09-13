@@ -1,57 +1,86 @@
 from threading import Thread
-import imaplib
 import email
+from email import utils
+import time
+from datetime import datetime as dt
+
+from . import StringElaborator, ImapDownloadAttachFile
 
 
 class ImapMail(Thread):
 
-    def __init__(self, sUser, sPwd, sBox):
+    def __init__(self, aMsg, sToken, sBox):
         super(ImapMail, self).__init__(daemon=True)
 
-        self.sUser = sUser
-        self.sPwd = sPwd
+        self.aMsg = aMsg
+        self.sToken = sToken
         self.sBox = sBox
-
-        self.oImap = None
-
-        self.aBoxMail = []
-
-    def connect(self):
-
-        try:
-            self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
-            self.oImap.login(user=self.sUser, password=self.sPwd)
-            self.oImap.select(self.sBox)
-
-        except Exception as sErr:
-            print(sErr)
 
     def run(self):
 
-        self.connect()
+        from mail.models import Email, Users
 
-        status, messages = self.oImap.select(self.sBox)
+        try:
+            if isinstance(self.aMsg, list):
+                for response in self.aMsg:
+                    if isinstance(response, tuple):
+                        msg = email.message_from_bytes(response[1])
 
-        nMess = int(messages[0].decode("utf-8"))
+                        EMAIL = Email.objects.all().filter(mailId=msg["Message-ID"])
+                        if len(EMAIL) > 0:
+                            break
 
-        for i in range(1, nMess + 1):
-            res, msg = self.oImap.fetch(str(i), "(RFC822)")
+                        ''' gestione del body '''
+                        sTmp = ""
+                        if msg.is_multipart():
+                            sTmp = msg.get_payload(0)
+                        else:
+                            sTmp = msg.get_payload(None, True)
 
-            for response in msg:
-                if isinstance(response, tuple):
-                    msg = email.message_from_bytes(response[1])
-                    aFile = []
+                        ''' gestione dei vuoti '''
+                        aTo, aCC, aCCn = [], [], []
+                        if msg["To"] is not None:
+                            aTo = msg["To"].split(",")
 
-                    sIdMess = msg["Message-ID"]
-                    if sIdMess not in self.aBoxMail:
+                        if msg["CC"] is not None:
+                            aCC = msg["CC"].split(",")
+
+                        if msg["CCn"] is not None:
+                            aCCn = msg["CCn"].split(",")
+
+                        ''' gestione dei file collegati '''
+                        aTmp = []
                         for part in msg.walk():
                             if part.get_filename() is not None:
-                                aFile.append(part.get_filename())
-                        msg["File"] = aFile
-                        self.aBoxMail.append(msg)
+                                aTmp.append(part.get_filename())
 
-    def getMailBoxes(self):
-        return self.aBoxMail
+                        ''' gestione della data '''
+                        dData = dt.fromtimestamp(
+                            time.mktime(utils.parsedate(msg["Date"]))
+                        )
 
+                        USER = Users.objects.all().filter(token=self.sToken)[0]
+                        oMail = Email(
+                            mailId=msg["Message-ID"],
+                            user=USER,
+                            box=self.sBox,
+                            sender=msg["From"],
+                            to=aTo,
+                            cc=aCC,
+                            ccn=aCCn,
+                            subject=msg["Subject"],
+                            date=dData,
+                            contentType=msg["Content-Type"],
+                            body=str(sTmp),
+                            file=aTmp
+                        )
 
+                        oMail.save()
+                        print("Save new mail:", oMail.mailId)
 
+                        for part in msg.walk():
+                            if part.get_filename() is not None:
+                                ImapDownloadAttachFile(oMail, part).start()
+
+        except Exception as sErr:
+            print("IMAP_MAIL:", sErr)

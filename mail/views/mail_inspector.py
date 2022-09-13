@@ -14,28 +14,24 @@ class MailInspector(View):
         sMailId = str( request.GET.get("messid") )
 
         objIMAP = settings.IMAP_MANAGER.get(sToken)
-        oMail = objIMAP.getMailDict().get(sMailId)
+        oMail = objIMAP.getMailFromId(sMailId)
+
+        dFile = {}
+        if len(oMail.file) > 0:
+            dFile = objIMAP.getUrlFromEmail(sMailId)
 
         context = {
             "token": sToken,
-            "body": StringElaborator(str( objIMAP.readMessageFromId(sMailId) )).getPlainText(),
-            "date": oMail["Date"],
-            "subject": oMail["Subject"],
-            "from": oMail["From"],
-            "cc": oMail["CC"],
+            "body": StringElaborator(str( oMail.body )).getPlainText(),
+            "date": oMail.date,
+            "subject": oMail.subject,
+            "from": oMail.sender,
+            "to": oMail.to,
+            "cc": oMail.cc,
             "boxes": [],
-            "file": oMail["File"],
+            "file": dFile,
             "mailTo": []
         }
-
-        if len(oMail["File"]) > 0:
-            ImapDownloadAttachFile(sToken, sMailId, objIMAP.getCurrentBoxMail()).start()
-
-        if oMail["To"] is not None:
-            context["mailTo"] += oMail["To"].split(",")
-
-        if oMail["CC"] is not None:
-            context["mailTo"] += oMail["CC"].split(",")
 
         objIMAP = settings.IMAP_MANAGER.get(sToken)
         for id, box in objIMAP.getMailBoxes().items():

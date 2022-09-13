@@ -2,7 +2,7 @@
 from mail.models import Users
 from django.views import View
 from urllib.parse import urlencode
-
+from django.conf import settings
 
 from django.shortcuts import redirect
 
@@ -53,6 +53,7 @@ class CheckLogin(View):
             context["user"] = sUser
 
             # creare nello stack il nuovo utente e avviare il thread
+            settings.IMAP_MANAGER.push(str(USER.token), sUser, sPwd)
 
         sBaseUrl = "../home/"
         sEncodedUrl = "{}?{}".format(sBaseUrl, urlencode(context))

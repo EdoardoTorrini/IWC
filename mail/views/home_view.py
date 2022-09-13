@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from django.conf import settings
-from IWC.my_lib import DateTimeConverter
+from IWC.my_lib import DateTimeConverter, APIMail
 
 
 class HomeMailView(View):
@@ -27,14 +27,14 @@ class HomeMailView(View):
         for id, box in objIMAP.getMailBoxes().items():
             context["boxes"].append({id: box})
 
-        for sMailId, oMail in objIMAP.getMailDict().items():
+        for mail in objIMAP.getMailList():
             context["mail"].append(
                 {
-                    "messid": sMailId,
-                    "date": DateTimeConverter(oMail["Date"], bEmail=True).getDateFormatted("%d %b"),
-                    "subject": oMail["Subject"],
-                    "from": str( oMail["From"])[:oMail["From"].find(" <") ],
-                    "to": oMail["To"] # str( oMail["To"])[:oMail["To"].find(" <") ]
+                    "messid": mail.mailId,
+                    "date": mail.date.strftime("%d %b"),
+                    "subject": mail.subject,
+                    "from": str( mail.sender)[:mail.sender.find(" <") ],
+                    "to": str(mail.to)
                 }
             )
 
