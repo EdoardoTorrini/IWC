@@ -19,9 +19,7 @@
             <h1>
                 MAIL CLIENT
             </h1>
-            <div class="aside_alt" onclick="showPhoneMenu()">
-                MENU
-            </div>
+            <img id="imgLogOut" src="{% static 'mail/img/profile.png' %}" onclick="OpenWindLogOut()">
         </header>
 
         <div id="phoneMenu">
@@ -65,7 +63,6 @@
         
         <div class="content">
             <div id="pageContent">
-                
                 {% block PageContent %}
                 {% for element in mail %}
                 <form id="{{ element.messid }}" action="{% url 'mail:inspect_mail' %}" method="GET">

@@ -252,49 +252,6 @@ nav button:hover {
 	}
 }
 
-@media only screen and (max-width: 800px) {
-	body {
-		animation-duration: 0s !important;
-	-webkit-animation-duration: 0s !important;
-	transition:background-color 0s, opacity 0s, color 0s, width 0s, height 0s, padding 0s, margin 0s !important;
-	}
-
-	aside {
-		display: none;
-	}
-
-	.aside_alt {
-		visibility: visible;
-	}
-
-	nav button {
-		width: 100%;
-	}
-
-	.content {top: 62px;
-		left: 2px;
-		right: 2px;
-		bottom: 0px;
-		padding-right: 5px;
-		padding-left: 2px;
-	}
-
-	.sendBtn_phone {
-		display: block;
-		position: absolute;
-		bottom: 5px;
-		right: 5px;
-	}
-
-	@keyframes buttonHover {
-		
-	}
-	@keyframes buttonReset {
-		
-	}
-
-}
-
 ::-webkit-scrollbar {
     width: 5px;
 
@@ -347,6 +304,19 @@ nav button:hover {
 	background-color: #f7dc0a;
 
 }
+
+#imgLogOut {
+	background-color: #f7dc0a; 
+	border-radius: 18px;
+
+	float: right;
+	margin-right: 50px;
+}
+
+#imgLogOut:hover {
+	cursor: pointer;
+}
+
 
 /* PARTE RIGUARDANTE LA SCRITTURA DELL'EMAIL */
 
@@ -474,7 +444,7 @@ textarea {
 
 #divInsMail {
 
-	background-color: #f7dc0a;
+	background-color: #ffffff;
 
 	position: fixed;
 	top: 70px;
@@ -505,7 +475,7 @@ textarea {
 	border-radius: 15px;
 	border-color: #af9b02;
 
-	background-color: #f7dc0a;
+	background-color: #ffffff;
 }
 
 .dropdown-content {
@@ -523,3 +493,54 @@ textarea {
 }
 
 .show {display: block;}
+
+
+/* PARTE RIGUARDANTE LA LETTURA DEI FILE NELL'INSPECT */
+
+.dFileMail {
+	margin-top: 10px;
+	width: 150px;
+	height: 75px;
+	margin-right: 10px;
+
+	display: inline-block;
+}
+
+.dFileMail:hover {
+	cursor: pointer;
+}
+
+.dFileMailMini {
+	position: relative;
+	text-align: center;
+	color: white;
+
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.fileNameMail {
+	position: absolute;
+	top: 8px;
+	padding: 5px;
+	left: 8px;
+
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	color: #101010;
+	font-size: small;
+}
+
+.downloadFile {
+	position: absolute;
+	bottom: 10px;
+	right: 20px;
+
+	width: 25px;
+	height: 25px;
+}
+
+.downloadFile:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+

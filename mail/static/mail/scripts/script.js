@@ -31,6 +31,7 @@ function btnWriteClicked() {
 }
 
 function closePopWrtEmail() {
+    /* gestire il salvataggio sulle bozze */
     document.getElementById("wroteEmailDiv").style.display = "none";
 }
 
@@ -46,20 +47,22 @@ function selFileFromSystem() {
 function btnViewMailDetails() {
     document.getElementById("myDropdown").classList.toggle("show");
     console.log("show");
-  }
-  
-  // Close the dropdown if the user clicks outside of it
-  /*
-  window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
+}
+
+function ChangeAttach() {
+    var elem = document.getElementById("fileChooser").files;
+    for (let i=0; i<elem.length; i++) {
+        console.log(elem[i].name)
     }
-  }
-*/
+}
+
+function OpenWindLogOut() {
+    console.log("click");
+}
+
+function OpenFile(sUrl) {
+
+    var sFUrl = "/mail/" + sUrl;
+    
+    window.open(sFUrl, '_blank').focus();
+}

@@ -27,7 +27,7 @@ class StringElaborator:
 
         else:
             aRet = self.sString.split("\n\n")
-            sRet = aRet[1]
+            sRet = "".join(aRet)
 
         return sRet
 

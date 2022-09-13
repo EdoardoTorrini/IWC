@@ -1,6 +1,7 @@
 {% extends "mail/index.html" %}
 
 {% block PageContent %}
+{% load static %}
 
 <div id="divInsMail">
 
@@ -20,7 +21,13 @@
         <div id="myDropdown" class="dropdown-content">
             <label>from: {{ from }}</label><br>
             to:
-            {% for email in mailTo %}
+            {% for email in to %}
+                {% if email is not None %}
+                    <label>{{ email }}</label><br>
+                {% endif %}
+            {% endfor %}
+            cc:
+            {% for email in cc %}
                 {% if email is not None %}
                     <label>{{ email }}</label><br>
                 {% endif %}
@@ -30,15 +37,20 @@
         </div>
     </div>
 
-    <div>
+    <div id="dBodyMail">
+        
         {{ body }}
+
+        <script>
+            document.getElementById("dBodyMail").innerHTML = '{{ body }}';
+        </script>
     </div>
 
-    <div>
+    <div style="display: table; position: fixed; bottom: 25px;">
         {% if file is not None %}
 
             {% for doc in file %}
-                <a href="/mail/{{ doc.url }}">{{ doc.name }}</a>
+                {% include "mail/file_reader.html" %}
             {% endfor %}
 
         {% endif %}

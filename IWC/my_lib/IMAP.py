@@ -53,9 +53,24 @@ class MyIMAP(Thread):
                     nMess = int(messages[0].decode("utf-8"))
 
                     for i in range(1, nMess + 1):
-                        res, msg = self.oImap.fetch(str(i), "(RFC822)")
+                        aATT = ["(RFC822)", "(UNSEEN)"]
 
-                        ImapMail(msg, self.id, box).start()
+                        for elem in aATT:
+                            match elem:
+
+                                case "(RFC822)":
+                                    res, msg = self.oImap.fetch(str(i), elem)
+                                    ImapMail(msg, self.id, box).start()
+
+                                case "(UNSEEN)":
+                                    res, msg = self.oImap.search(None, elem)
+
+                                    if res == "OK":
+                                        if len(msg[0].split()) > 0:
+                                            ImapMail(msg, self.id, '"INBOX"').start()
+
+                                case _:
+                                    print("Qualcosa è andato storto")
 
         except Exception as sErr:
             print(self.email, "-", sErr)

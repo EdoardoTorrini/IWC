@@ -1,0 +1,11 @@
+
+{% load static %}
+
+<div class="dFileMail">
+    <div class="dFileMailMini">
+        <img src="{% static 'mail/img/file.png' %}" style="width: 100%;" onclick="OpenFile('{{ doc.url }}')">
+        <label class="fileNameMail">{{ doc.name }}</label>
+        <a id="FileUrl" href="/mail/{{ doc.url }}" hidden>{{ doc.name }}</a>
+        <img class="downloadFile" src="{% static 'mail/img/download.png' %}" onclick="downloadFile()">
+    </div>
+</div>

@@ -26,8 +26,8 @@ class MailInspector(View):
             "date": oMail.date,
             "subject": oMail.subject,
             "from": oMail.sender,
-            "to": oMail.to,
-            "cc": oMail.cc,
+            "to": oMail.to.strip('][').split(', '),
+            "cc": oMail.cc.strip('][').split(', '),
             "boxes": [],
             "file": dFile,
             "mailTo": []
