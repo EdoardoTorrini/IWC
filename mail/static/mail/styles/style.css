@@ -440,6 +440,32 @@ textarea {
 	cursor: pointer;
 }
 
+#navUser {
+	display: none;
+	background-color: #101010;
+
+	height: 75px;
+	width: 250px;
+
+	position: fixed;
+	top: 55px;
+	left: 1020px;
+}
+
+#ulLogOut {
+	list-style-type: none;
+}
+
+.liLogOut {
+	text-decoration: none;
+	text-align: center;
+}
+
+#idLiLogOut:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+
 /* PARTE DELLA LETTURA DELLE MAIL */
 
 #divInsMail {

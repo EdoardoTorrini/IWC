@@ -33,10 +33,11 @@ class ImapDownloadAttachFile(Thread):
 
             fSave.close()
             os.remove(sPath)
+            sPath = os.path.join(settings.MEDIA_ROOT, self.fNew.get_filename())
 
             oDoc = Document(
                 email=self.MAIL,
-                path=fPc,
+                path=sPath,
                 serverPath=fUrl[1:],
                 filename=self.fNew.get_filename()
             )

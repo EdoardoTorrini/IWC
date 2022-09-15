@@ -24,3 +24,18 @@ class LoginMailView(View):
             return redirect(sEncodedUrl, method="GET")
         else:
             return render(request, "mail/login.html", { "error": request.GET.get("error") is not None })
+
+    def post(self, request):
+
+        sToken = str( request.POST.get("token") )
+
+        USER = Users.objects.all().filter(token=sToken)[0]
+        USER.csrfToken = ""
+        USER.save()
+
+        context = {}
+
+        sBaseUrl = "../login/"
+        sEncodedUrl = "{}?{}".format(sBaseUrl, urlencode(context))
+        return redirect(sEncodedUrl, method="GET")
+

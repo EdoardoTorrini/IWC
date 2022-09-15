@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from django.conf import settings
-from IWC.my_lib import DateTimeConverter, APIMail
+from mail.models import Users
 
 
 class HomeMailView(View):
@@ -15,12 +15,14 @@ class HomeMailView(View):
 
         sToken = str( request.GET.get("token") )
 
+        USER = Users.objects.all().filter(token=sToken)[0]
         context = {
             "token": sToken,
             "mail": [],
             "boxes": [],
             "form": None,
-            "mail_sent": False
+            "mail_sent": False,
+            "user": USER.email
         }
 
         objIMAP = settings.IMAP_MANAGER.get(sToken)

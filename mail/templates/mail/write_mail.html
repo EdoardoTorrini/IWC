@@ -37,8 +37,8 @@
     </div>
     
     <div id="wroteEmailDivTitle" style="position: fixed; right: 5px; bottom: 5px; width: 790px;">
+        <div style="float: left;" id="fileAttach"></div>
         <div style="float: right; margin-right: 5px;">
-            
             <input type="file" id="fileChooser" name="document" onchange="ChangeAttach()" hidden multiple>
             <img src="{% static 'mail/img/allegare.png' %}" onclick="selFileFromSystem()" class="pointer">
             <input src="{% static 'mail/img/invia.png' %}" type="image">

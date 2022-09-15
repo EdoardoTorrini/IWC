@@ -22,6 +22,7 @@ class MailInspector(View):
 
         context = {
             "token": sToken,
+            "mail_id": sMailId,
             "body": StringElaborator(str( oMail.body )).getPlainText(),
             "date": oMail.date,
             "subject": oMail.subject,

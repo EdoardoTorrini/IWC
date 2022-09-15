@@ -6,6 +6,16 @@
         <img src="{% static 'mail/img/file.png' %}" style="width: 100%;" onclick="OpenFile('{{ doc.url }}')">
         <label class="fileNameMail">{{ doc.name }}</label>
         <a id="FileUrl" href="/mail/{{ doc.url }}" hidden>{{ doc.name }}</a>
-        <img class="downloadFile" src="{% static 'mail/img/download.png' %}" onclick="downloadFile()">
+        <img class="downloadFile" src="{% static 'mail/img/download.png' %}" onclick="downloadFile('{{ doc.url }}')">
+
+        <form id="{{ doc.url }}" action="{% url 'mail:downloadFile' %}" method="GET" hidden>
+            {% csrf_token %}
+            
+            <input type="hidden" value="{{ token }}" name="token">
+            <input type="hidden" value="{{ mail_id }}" name="mail_id">
+            <input type="hidden" value="{{ doc.name }}" name="file_name">
+
+        </form>
+
     </div>
 </div>

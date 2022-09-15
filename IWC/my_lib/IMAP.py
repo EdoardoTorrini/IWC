@@ -63,11 +63,15 @@ class MyIMAP(Thread):
                                     ImapMail(msg, self.id, box).start()
 
                                 case "(UNSEEN)":
-                                    res, msg = self.oImap.search(None, elem)
+                                    try:
+                                        res, msg = self.oImap.search(None, elem)
 
-                                    if res == "OK":
-                                        if len(msg[0].split()) > 0:
-                                            ImapMail(msg, self.id, '"INBOX"').start()
+                                        if res == "OK":
+                                            if len(msg[0].split()) > 0:
+                                                ImapMail(msg, self.id, '"INBOX"').start()
+
+                                    except Exception as sErr:
+                                        print("IMAP:", sErr)
 
                                 case _:
                                     print("Qualcosa è andato storto")

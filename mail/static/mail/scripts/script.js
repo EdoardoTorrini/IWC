@@ -51,13 +51,29 @@ function btnViewMailDetails() {
 
 function ChangeAttach() {
     var elem = document.getElementById("fileChooser").files;
-    for (let i=0; i<elem.length; i++) {
-        console.log(elem[i].name)
+    var div = document.getElementById("fileAttach");
+    div.innerHTML = "";
+
+    if (elem.length < 2) {
+        for (let i=0; i<elem.length; i++) {
+            var str = "<label>" + elem[i].name + "</label><br>";
+            div.innerHTML += str;
+        }
+    }
+    else {
+        var str = "<label>Allegati: " + elem.length + "</label><br>";
+        div.innerHTML += str;
     }
 }
 
 function OpenWindLogOut() {
-    console.log("click");
+    var nav = document.getElementById("navUser");
+
+    if (nav.style.display == "block") {
+        nav.style.display = "none";
+    }
+    else
+        nav.style.display = "block"
 }
 
 function OpenFile(sUrl) {
@@ -65,4 +81,12 @@ function OpenFile(sUrl) {
     var sFUrl = "/mail/" + sUrl;
     
     window.open(sFUrl, '_blank').focus();
+}
+
+function downloadFile(sId) {
+    document.getElementById(sId).submit();
+}
+
+function logOut() {
+    document.getElementById("logOut").submit();
 }
