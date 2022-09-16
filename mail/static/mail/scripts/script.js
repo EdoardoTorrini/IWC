@@ -61,9 +61,25 @@ function ChangeAttach() {
         }
     }
     else {
-        var str = "<label>Allegati: " + elem.length + "</label><br>";
+        var str = "<button class=\"dropbtn\" onmouseover=\"over()\" onmouseout=\"not_over()\">Allegati: " + elem.length + "</button><br>";
+        str += "<div id=\"dropdown-content\">";
+
+        for (let i=0; i<elem.length; i++) {
+            var sLab = "<label>" + elem[i].name + "</label><br>";
+            str += sLab;
+        }
+        str += "</div>"
+
         div.innerHTML += str;
     }
+}
+
+function over() {
+    var div = document.getElementById("dropdown-content").style.display = "block";
+}
+
+function not_over() {
+    var div = document.getElementById("dropdown-content").style.display = "none";
 }
 
 function OpenWindLogOut() {

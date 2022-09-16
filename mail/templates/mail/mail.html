@@ -42,7 +42,8 @@
         {{ body }}
 
         <script>
-            document.getElementById("dBodyMail").innerHTML = '{{ body }}';
+            var str = "<div>" + '{{ body }}' + "</div>";
+            document.getElementById("dBodyMail").innerHTML = str;
         </script>
     </div>
 

@@ -21,16 +21,14 @@
             </h1>
             <img id="imgLogOut" src="{% static 'mail/img/profile.png' %}" onclick="OpenWindLogOut()">
             <nav id="navUser">
-                <ul id="ulLogOut">
-                    <li class="liLogOut">{{ user }}</li>
-                    <li id="idLiLogOut" class="liLogOut" onclick="logOut()">LogOut</li>
-                    <form id="logOut" action="{% url 'mail:login' %}" method="POST">
-                        {% csrf_token %}
+                <label style="width: 100%; font-size: large;">{{ user }}</label><br>
+                <label onclick="logOut()" id="idLiLogOut">Logout</label>
+                <form id="logOut" action="{% url 'mail:login' %}" method="POST" hidden>
+                    {% csrf_token %}
 
-                        <input type="hidden" value="{{ token }}" name="token">
+                    <input type="hidden" value="{{ token }}" name="token">
 
-                    </form>
-                </ul>
+                </form>
             </nav>
         </header>
 

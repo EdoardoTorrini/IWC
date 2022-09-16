@@ -27,6 +27,19 @@ class StringElaborator:
 
         else:
             aRet = self.sString.split("\n\n")
+            aRemoveElem = []
+
+            for elem in aRet:
+
+                if elem.find("--") > -1:
+                    aRemoveElem.append(elem)
+
+                elif elem.find("Content-Type") > -1:
+                    aRemoveElem.append(elem)
+
+            for elem in aRemoveElem:
+                aRet.remove(elem)
+
             sRet = "".join(aRet)
 
         return sRet
