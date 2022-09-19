@@ -38,13 +38,9 @@
     </div>
 
     <div id="dBodyMail">
-        
-        {{ body }}
 
-        <script>
-            var str = "<div>" + '{{ body }}' + "</div>";
-            document.getElementById("dBodyMail").innerHTML = str;
-        </script>
+        {{ body.plain }}
+        
     </div>
 
     <div style="display: table; position: fixed; bottom: 25px;">

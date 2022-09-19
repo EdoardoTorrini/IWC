@@ -5,6 +5,7 @@ class StringElaborator:
 
     def __init__(self, sString):
         self.sString = sString
+        self.dData = {}
 
     def getPlainText(self):
 
@@ -25,22 +26,40 @@ class StringElaborator:
                 case _:
                     print("porco dio")
 
+            self.dData["plain"] = sRet
+
         else:
-            aRet = self.sString.split("\n\n")
-            aRemoveElem = []
+            nFindStart, sQuery = self.sString.find("--"), ""
+            if nFindStart > -1:
+                sTmp = self.sString[nFindStart:]
+                sQuery = sTmp[:sTmp.find("\n")]
 
-            for elem in aRet:
+                if sQuery is not None:
+                    aElemFormat = self.sString.split(sQuery)
+                    aElemFormat.remove(aElemFormat[0])
+                    for elem in aElemFormat:
+                        if elem.find("Content-Type") > -1:
+                            sTmp = elem.strip()
 
-                if elem.find("--") > -1:
-                    aRemoveElem.append(elem)
+                            sKey = ""
+                            for str in sTmp.split("\"\n"):
+                                sKey = self.StringElaborator(str, sKey)
+            else:
+                sKey = ""
+                for elem in self.sString.split("\n"):
+                    if len(elem) > 0:
+                        sKey = self.StringElaborator(elem, sKey)
 
-                elif elem.find("Content-Type") > -1:
-                    aRemoveElem.append(elem)
+        return self.dData
 
-            for elem in aRemoveElem:
-                aRet.remove(elem)
-
-            sRet = "".join(aRet)
-
-        return sRet
+    def StringElaborator(self, sTmp, sKey):
+        nFindStart = sTmp.find("Content-Type: ")
+        if nFindStart > -1:
+            sTmp = sTmp[nFindStart + len("Content-Type: "):]
+            sKey = sTmp[:sTmp.find(";")].split("/")[1]
+            self.dData[sKey] = ""
+            return sKey
+        else:
+            self.dData[sKey] = sTmp.strip()
+            return ""
 

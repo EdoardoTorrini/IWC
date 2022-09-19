@@ -106,3 +106,7 @@ function downloadFile(sId) {
 function logOut() {
     document.getElementById("logOut").submit();
 }
+
+function ChangeHtmlDiv(sDict) {
+    console.log(sDict);
+}

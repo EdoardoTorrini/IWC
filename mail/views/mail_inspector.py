@@ -3,7 +3,8 @@ from django.views import View
 from django.conf import settings
 from django.shortcuts import render
 
-from IWC.my_lib import StringElaborator, ImapDownloadAttachFile
+from IWC.my_lib import StringElaborator
+from mail.models import Users
 
 
 class MailInspector(View):
@@ -12,6 +13,8 @@ class MailInspector(View):
 
         sToken = str( request.GET.get("token") )
         sMailId = str( request.GET.get("messid") )
+
+        USER = Users.objects.all().filter(token=sToken)[0]
 
         objIMAP = settings.IMAP_MANAGER.get(sToken)
         oMail = objIMAP.getMailFromId(sMailId)
@@ -31,7 +34,7 @@ class MailInspector(View):
             "cc": oMail.cc.strip('][').split(', '),
             "boxes": [],
             "file": dFile,
-            "mailTo": []
+            "user": USER.email
         }
 
         objIMAP = settings.IMAP_MANAGER.get(sToken)

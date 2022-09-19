@@ -22,6 +22,8 @@ class MyIMAP(Thread):
         self.sSelBoxMail = '"INBOX"'
         self.tIMAP_USER = APIMail(self.id)
 
+        self.oImap = None
+
         # TODO: se non è connesso a internet va in errore
         self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
 
@@ -38,6 +40,7 @@ class MyIMAP(Thread):
         self.bRun = True
 
         try:
+
             self.recv = self.oImap.login(self.email, self.pwd)
             self.aBoxList = [ box.decode("utf-8") for box in self.oImap.list()[1] ]
 
@@ -75,6 +78,8 @@ class MyIMAP(Thread):
 
                                 case _:
                                     print("Qualcosa è andato storto")
+
+                # TODO: proviamo
 
         except Exception as sErr:
             print(self.email, "-", sErr)
