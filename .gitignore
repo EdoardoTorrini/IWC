@@ -1,0 +1,14 @@
+
+*.sqlite3
+*.pyc
+mail/migrations/__init__.py
+mail/migrations/0001_initial.py
+media/3_Voti validi e nulli_rotated.pdf
+media/3_Voti validi e nulli_rotated_kRM4rKZ.pdf
+media/programma.pdf
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/IWC.iml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
