@@ -24,9 +24,6 @@ class MyIMAP(Thread):
 
         self.oImap = None
 
-        # TODO: se non è connesso a internet va in errore
-        self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
-
     def check_account(self):
 
         try:
@@ -41,14 +38,17 @@ class MyIMAP(Thread):
 
         try:
 
-            self.recv = self.oImap.login(self.email, self.pwd)
-            self.aBoxList = [ box.decode("utf-8") for box in self.oImap.list()[1] ]
-
-            for box in self.getMailBoxes().keys():
-                if box not in self.dMailDict.keys():
-                    self.dMailDict[box] = {}
-
             while 1:
+
+                # TODO: se non è connesso a internet va in errore
+                self.oImap = imaplib.IMAP4_SSL("imap.gmail.com")
+
+                self.recv = self.oImap.login(self.email, self.pwd)
+                self.aBoxList = [ box.decode("utf-8") for box in self.oImap.list()[1] ]
+
+                for box in self.getMailBoxes().keys():
+                    if box not in self.dMailDict.keys():
+                        self.dMailDict[box] = {}
 
                 # bisogna poter cambiare cartella
                 for box in self.getMailBoxes().keys():
@@ -80,6 +80,8 @@ class MyIMAP(Thread):
                                     print("Qualcosa è andato storto")
 
                 # TODO: proviamo
+                self.oImap.close()
+                self.oImap.logout()
 
         except Exception as sErr:
             print(self.email, "-", sErr)

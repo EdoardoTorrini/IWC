@@ -36,7 +36,7 @@ class HomeMailView(View):
                     "date": mail.date.strftime("%d %b"),
                     "subject": mail.subject,
                     "from": str( mail.sender)[:mail.sender.find(" <") ],
-                    "to": str(mail.to)
+                    "to": eval(mail.to)
                 }
             )
 

@@ -84,7 +84,7 @@
                         {% if mail_sent is False %}
                             <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.from }}</div>
                         {% else %}
-                            <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.to }}</div>
+                            <div style="float: left; width: 25%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.to.0 }}</div>
                         {% endif %}
                         <div style="float: left; width: 50%; white-space: nowrap; text-overflow: clip; overflow: hidden; text-align: center;">{{ element.subject }}</div>
                         <div style="float: left; width: 25%; text-align: right;">{{ element.date }}&emsp;</div>
