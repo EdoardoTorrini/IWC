@@ -12,3 +12,7 @@ media/programma.pdf
 .idea/IWC.iml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/inspectionProfiles/profiles_settings.xml
+/media
+/.idea
+/__pycache__
+/.idea
